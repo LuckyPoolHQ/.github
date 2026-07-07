@@ -4,7 +4,7 @@
 
 ### No-loss prize savings on Stellar.
 
-**Deposit USDC → Earn real yield via Blend → One winner takes the yield every week → Your principal never leaves your side.**
+**Deposit USDC → Earn real yield via a yield-generating pool (e.g. Blend) → One winner takes the yield every week → Your principal never leaves your side.**
 
 [Contracts](https://github.com/LuckyPoolHQ/LuckyPool-contracts) · [Frontend](https://github.com/LuckyPoolHQ/LuckyPool-frontend) · [SDK](https://github.com/LuckyPoolHQ/LuckyPool-sdk) · [Docs](https://github.com/LuckyPoolHQ/LuckyPool-docs)
 
@@ -14,14 +14,14 @@
 
 ## What is LuckyPool?
 
-LuckyPool is a **no-loss prize savings protocol** on Stellar. Every depositor's principal is pooled and put to work earning yield through [Blend](https://blend.capital). Every week, all of that accumulated yield — and only the yield — is awarded to a single winner, selected by verifiable on-chain randomness. Nobody who doesn't win loses anything: deposits are always fully withdrawable.
+LuckyPool is a **no-loss prize savings protocol** on Stellar. Every depositor's principal is pooled and put to work earning yield through a yield-generating pool (e.g. [Blend](https://blend.capital)). Every week, all of that accumulated yield — and only the yield — is awarded to a single winner, selected by verifiable on-chain randomness. Nobody who doesn't win loses anything: deposits are always fully withdrawable.
 
 Think of it as a lottery with the risk removed. This isn't a new idea — prize-linked savings schemes like the UK's **Premium Bonds** run on the same principle. Nothing like it exists in DeFi on Stellar today.
 
 |  | |
 |---|---|
 | 💰 **Deposit** | Any amount of USDC. 1 USDC = 1 ticket toward the weekly draw. |
-| 📈 **Earn** | Deposits are routed into Blend lending pools, earning yield continuously. |
+| 📈 **Earn** | Deposits are routed into a yield-generating pool (e.g. Blend), earning yield continuously. |
 | 🎟️ **Win or don't lose** | Each week's accumulated yield goes to one winner via VRF. Everyone else keeps 100% of their principal and rolls into the next round. |
 | 🔓 **Withdraw anytime** | Principal is never locked or at risk. |
 
@@ -48,7 +48,7 @@ Stellar's sub-cent fees make weekly, permissionless draws and harvests economica
  LuckyPool contract records position, mints tickets (1 USDC = 1 ticket)
          │
          ▼
- USDC routed into a Blend lending pool → earns yield continuously
+ USDC routed into a yield-generating pool (e.g. Blend) → earns yield continuously
          │
          ▼
  harvest_yield()  (permissionless, weekly)
@@ -74,7 +74,7 @@ Stellar's sub-cent fees make weekly, permissionless draws and harvests economica
  Friday midnight UTC
          │
          ▼
- harvest_yield()        (permissionless) — accrued yield moves from Blend into the prize pool
+ harvest_yield()        (permissionless) — accrued yield moves from the yield-generating pool into the prize pool
          │
          ▼
  request_draw()         (permissionless) — contract emits a VRF request to the oracle
@@ -98,7 +98,7 @@ Every draw emits enough data for anyone to independently re-verify the outcome a
 
 | Repository | Description |
 |---|---|
-| **[LuckyPool-contracts](https://github.com/LuckyPoolHQ/LuckyPool-contracts)** | Soroban smart contracts (Rust): deposits, Blend routing, yield harvesting, VRF-driven prize draw |
+| **[LuckyPool-contracts](https://github.com/LuckyPoolHQ/LuckyPool-contracts)** | Soroban smart contracts (Rust): deposits, yield-pool routing, yield harvesting, VRF-driven prize draw |
 | **[LuckyPool-frontend](https://github.com/LuckyPoolHQ/LuckyPool-frontend)** | Next.js app — landing page and user dashboard (deposit, withdraw, lottery history) |
 | **[LuckyPool-sdk](https://github.com/LuckyPoolHQ/LuckyPool-sdk)** | DrawEngine SDK — typed Soroban RPC client for reading/writing contract state |
 | **[LuckyPool-docs](https://github.com/LuckyPoolHQ/LuckyPool-docs)** | Architecture, contract interface, yield integration, randomness design, go-to-market, pitch deck |
@@ -110,7 +110,7 @@ Every draw emits enough data for anyone to independently re-verify the outcome a
 | Layer | Technology |
 |---|---|
 | Smart contracts | Rust + Soroban SDK 26, deployed on Stellar |
-| Yield source | [Blend Protocol](https://blend.capital) lending pools |
+| Yield source | Yield-generating lending pool (e.g. [Blend Protocol](https://blend.capital)) |
 | Randomness | VRF oracle (Stellar Oracle Shield / Acurast) |
 | Wallet | [Freighter](https://freighter.app) (`@stellar/freighter-api ^6`) |
 | Frontend | Next.js 16, Tailwind CSS 4, Framer Motion |
