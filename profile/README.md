@@ -62,6 +62,38 @@ Stellar's sub-cent fees make weekly, permissionless draws and harvests economica
 
 ---
 
+## Fair, verifiable draws
+
+**The problem:** smart contracts are deterministic — every node must reach the same result, so a contract can't generate true randomness on its own. Naive approaches (block hash, ledger sequence, timestamp) are manipulable: a validator who is also a large depositor can see upcoming block data before it's finalized and choose to withhold a block that would make them lose. This is the classic MEV attack on on-chain lotteries.
+
+**The solution:** LuckyPool uses a **Verifiable Random Function (VRF)**. A VRF takes a private key and a public input (the round number) and produces a random output plus a cryptographic proof. The contract verifies the proof on-chain before using the output — the VRF operator cannot manipulate the result without invalidating the proof. That gives the draw three properties a naive approach can't: unpredictable before it closes, verifiable after the fact, and resistant to manipulation by depositors, validators, or the team.
+
+**Draw infrastructure:**
+
+```text
+ Friday midnight UTC
+         │
+         ▼
+ harvest_yield()        (permissionless) — accrued yield moves from Blend into the prize pool
+         │
+         ▼
+ request_draw()         (permissionless) — contract emits a VRF request to the oracle
+         │
+         ▼
+ Oracle responds ~1–2 ledgers later with vrf_output + vrf_proof, posted on-chain
+         │
+         ▼
+ execute_draw(vrf_output, vrf_proof)
+   ├─ verifies the proof on-chain against the oracle's public key
+   ├─ derives winning_ticket = vrf_output % total_tickets
+   ├─ walks the depositor list to find who holds that ticket
+   └─ pays out the prize pool, emits DrawCompleted { round, winner, prize, vrf_output }
+```
+
+Every draw emits enough data for anyone to independently re-verify the outcome after the fact — the VRF proof against the oracle's public key, the ticket arithmetic, and the winning address — using only public Stellar ledger history. Full design (VRF provider options, the commit-reveal fallback, the winner-selection algorithm) is in [`LuckyPool-docs/randomness.md`](https://github.com/LuckyPoolHQ/LuckyPool-docs/blob/main/randomness.md).
+
+---
+
 ## Repositories
 
 | Repository | Description |
